@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="BatchRenamer.Core/BatchRenamer.Core.csproj" />
+  <Project Path="BatchRenamer.Tests/BatchRenamer.Tests.csproj" />
+</Solution>
