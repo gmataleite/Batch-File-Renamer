@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BatchRenamer.Core\BatchRenamer.Core.csproj" />
+    <ProjectReference Include="..\BatchRenamer.ViewModels\BatchRenamer.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>
