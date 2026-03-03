@@ -21,6 +21,13 @@ viewModel.SearchText = Console.ReadLine() ?? string.Empty;
 Console.Write("Digite o texto de substituição (deixe em branco para remover): ");
 viewModel.ReplaceText = Console.ReadLine() ?? string.Empty;
 
+Console.Write("Deseja copiar os arquivos em vez de movê-los? (s/n): ");
+string copyOption = Console.ReadLine()?.Trim().ToLower() ?? "n";
+if (copyOption == "s" || copyOption == "sim")
+{
+    viewModel.CopyFiles = true;
+}
+
 // 4. Dispara a execução da regra de negócio
 Console.WriteLine("\nProcessando arquivos...");
 viewModel.ExecuteRename();

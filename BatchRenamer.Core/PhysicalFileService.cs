@@ -15,4 +15,10 @@ public class PhysicalFileService : IFileService
         // Executa a movimentação/renomeação física no Windows
         File.Move(sourcePath, destinationPath);
     }
+    
+    public void Copy(string sourcePath, string destinationPath)
+    {
+        // Executa a movimentação/renomeação física no Windows
+        File.Copy(sourcePath, destinationPath);
+    }
 }
