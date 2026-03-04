@@ -46,9 +46,9 @@ Para rodar a suíte de testes que valida as regras de negócio sem tocar no disc
 ## 🗺️ Roadmap
 [x] Conclusão do MVP (CLI com Injeção de Dependência e MVVM base).
 
-[ ] Adicionar funcionalidade de "Copiar" arquivos (além de mover).
+[x] Adicionar funcionalidade de "Copiar" arquivos (além de mover).
 
-[ ] Suporte para caminhos de destino diferentes do diretório de origem.
+[x] Suporte para caminhos de destino diferentes do diretório de origem.
 
 [ ] Construção da Interface Gráfica (GUI) nativa para Windows (WPF/WinUI 3).
 

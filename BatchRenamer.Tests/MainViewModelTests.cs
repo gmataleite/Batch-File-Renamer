@@ -15,7 +15,8 @@ public class MainViewModelTests
 
         var viewModel = new MainViewModel(fakeService);
 
-        viewModel.FolderPath = @"C:\temp";
+        viewModel.SourceFolderPath = @"C:\temp";
+        viewModel.DestinationFolderPath = @"C:\temp";
         viewModel.SearchText = "/"; // Caractere inválido intencional
         viewModel.ReplaceText = "novo";
 
@@ -37,7 +38,32 @@ public class MainViewModelTests
 
         var viewModel = new MainViewModel(fakeService);
 
-        viewModel.FolderPath = @"C:\temp";
+        viewModel.SourceFolderPath = @"C:\temp";
+        viewModel.DestinationFolderPath = @"C:\temp";
+        viewModel.SearchText = "peca";
+        viewModel.ReplaceText = "part";
+
+        // Act
+        viewModel.ExecuteRename();
+
+        // Assert
+        // Verificamos se a propriedade de mensagem da tela contém a palavra "sucesso"
+        Assert.Contains("sucesso", viewModel.ResultMessage);
+        Assert.Contains("1", viewModel.ResultMessage);
+    }
+
+        [Fact]
+    public void ExecuteRenameToDifferentFolder_WithValidInputs_ShouldUpdateResultMessageWithSuccess()
+    {
+        // Arrange
+        // 1. Criamos a peça falsa (Dublê)
+        var fakeService = new FakeFileService();
+        fakeService.FilesToReturn = [ @"C:\temp\peca01.ipt" ];
+
+        var viewModel = new MainViewModel(fakeService);
+
+        viewModel.SourceFolderPath = @"C:\temp";
+        viewModel.DestinationFolderPath = @"C:\temporario";
         viewModel.SearchText = "peca";
         viewModel.ReplaceText = "part";
 

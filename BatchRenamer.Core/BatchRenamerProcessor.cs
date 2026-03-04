@@ -9,9 +9,9 @@ public class BatchRenamerProcessor
         _fileService = fileService;
     }
 
-    public int Execute(string folderPath, string search, string replace, bool copyFiles)
+    public int Execute(string sourcePath, string destinationFolderPath, string search, string replace, bool copyFiles)
     {
-        string[] files = _fileService.GetFilesFromDirectory(folderPath);
+        string[] files = _fileService.GetFilesFromDirectory(sourcePath);
         int renamedCount = 0;
 
         foreach (var fileFullName in files)
@@ -23,7 +23,7 @@ public class BatchRenamerProcessor
                 
                 if (fileName != newFileName)
                 {
-                    string directory = Path.GetDirectoryName(fileFullName)!;
+                    string directory = string.IsNullOrWhiteSpace(destinationFolderPath) ? Path.GetDirectoryName(fileFullName)! : destinationFolderPath;
                     string destinationPath = Path.Combine(directory, newFileName);
 
                     if (copyFiles)

@@ -13,10 +13,14 @@ var viewModel = new MainViewModel(physicalFileService);
 
 // 3. Solicitamos os dados do usuário
 Console.Write("Digite o caminho da pasta: ");
-viewModel.FolderPath = Console.ReadLine() ?? string.Empty;
+viewModel.SourceFolderPath = Console.ReadLine() ?? string.Empty;
 
 Console.Write("Digite o texto a ser buscado: ");
 viewModel.SearchText = Console.ReadLine() ?? string.Empty;
+
+Console.Write("Digite o caminho da pasta de destino (deixe em branco para usar a mesma): ");
+string destinationFolder = Console.ReadLine() ?? string.Empty;
+viewModel.DestinationFolderPath = string.IsNullOrWhiteSpace(destinationFolder) ? viewModel.SourceFolderPath : destinationFolder;
 
 Console.Write("Digite o texto de substituição (deixe em branco para remover): ");
 viewModel.ReplaceText = Console.ReadLine() ?? string.Empty;

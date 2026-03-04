@@ -5,7 +5,8 @@ namespace BatchRenamer.ViewModels;
 
 public class MainViewModel
 {
-    public string FolderPath { get; set; } = string.Empty;
+    public string SourceFolderPath { get; set; } = string.Empty;
+    public string DestinationFolderPath { get; set; } = string.Empty;
     public string SearchText { get; set; } = string.Empty;
     public string ReplaceText { get; set; } = string.Empty;
     public string ResultMessage { get; set; } = string.Empty;
@@ -26,7 +27,7 @@ public class MainViewModel
             var processor = new BatchRenamerProcessor(_fileService);
             
             // Lemos das próprias propriedades da classe
-            int count = processor.Execute(FolderPath, SearchText, ReplaceText, CopyFiles);
+            int count = processor.Execute(SourceFolderPath, DestinationFolderPath, SearchText, ReplaceText, CopyFiles);
             
             // 3. Atualizamos a propriedade da tela em vez de usar 'return'
             ResultMessage = $"Renomeação concluída com sucesso. Arquivos alterados: {count}";

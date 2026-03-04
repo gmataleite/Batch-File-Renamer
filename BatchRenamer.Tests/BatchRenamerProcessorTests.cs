@@ -10,7 +10,7 @@ public class FakeFileService : IFileService
     public string[] FilesToReturn { get; set; } = [];
     public List<string> MovedFiles { get; } = new();
     public bool SimulateFileLocked  { get; set; } = false;
-    public bool CopyFiles { get; set; } = false;
+    
     public string[] GetFilesFromDirectory(string path) => FilesToReturn;
 
     public void Move(string sourcePath, string destinationPath)
@@ -39,17 +39,17 @@ public class BatchRenamerProcessorTests
     {
         // Arrange
         var fakeService = new FakeFileService();
-        fakeService.FilesToReturn = [ @"C:\temp\peca01.ipt", @"C:\temp\peca02.ipt" ];
+        fakeService.FilesToReturn = [ @"c:/temp/peca01.ipt", @"c:/temp/peca02.ipt" ];
         
         var processor = new BatchRenamerProcessor(fakeService);
 
         // Act
-        int result = processor.Execute(@"C:\temp", "peca", "part", false);
+        int result = processor.Execute(@"c:/temp", @"c:/temp", "peca", "part", false);
 
         // Assert
         Assert.Equal(2, result);
-        Assert.Contains(@"C:\temp\part01.ipt", fakeService.MovedFiles);
-        Assert.Contains(@"C:\temp\part02.ipt", fakeService.MovedFiles);
+        Assert.Contains(@"c:/temp/part01.ipt", fakeService.MovedFiles);
+        Assert.Contains(@"c:/temp/part02.ipt", fakeService.MovedFiles);
     }
 
     [Fact]
@@ -57,13 +57,13 @@ public class BatchRenamerProcessorTests
     {
         // Arrange
         var fakeService = new FakeFileService();
-        fakeService.FilesToReturn = [ @"C:\temp\peca01.ipt" ];
+        fakeService.FilesToReturn = [ @"c:/temp/peca01.ipt" ];
         fakeService.SimulateFileLocked = true;
 
         var processor = new BatchRenamerProcessor(fakeService);
         
         // Act
-        int result = processor.Execute(@"C:\temp", "peca", "part", false);
+        int result = processor.Execute(@"c:/temp", @"c:/temp", "peca", "part", false);
 
         // Assert
         Assert.Equal(0, result);
@@ -75,23 +75,40 @@ public class BatchRenamerProcessorTests
     {
         // Arrange
         var fakeService = new FakeFileService();
-        fakeService.FilesToReturn = [ @"C:\temp\peca01.ipt", @"C:\temp\peca02.ipt" ];
-        fakeService.CopyFiles = true;
+        fakeService.FilesToReturn = [ @"c:/temp/peca01.ipt", @"c:/temp/peca02.ipt" ];
         
         var processor = new BatchRenamerProcessor(fakeService);
 
         // Act
-        int result = processor.Execute(@"C:\temp", "peca", "part", true);
+        int result = processor.Execute(@"c:/temp", @"c:/temp", "peca", "part", true);
 
         // Assert
         Assert.Equal(2, result);
-        Assert.Contains(@"C:\temp\peca01.ipt", fakeService.FilesToReturn);
-        Assert.Contains(@"C:\temp\peca02.ipt", fakeService.FilesToReturn);
-        Assert.Contains(@"C:\temp\part01.ipt", fakeService.MovedFiles);
-        Assert.Contains(@"C:\temp\part02.ipt", fakeService.MovedFiles);
-        Assert.DoesNotContain(@"C:\temp\peca01.ipt", fakeService.MovedFiles);
-        Assert.DoesNotContain(@"C:\temp\peca02.ipt", fakeService.MovedFiles);
-        Assert.DoesNotContain(@"C:\temp\part01.ipt", fakeService.FilesToReturn);
-        Assert.DoesNotContain(@"C:\temp\part02.ipt", fakeService.FilesToReturn);
+        Assert.Contains(@"c:/temp/peca01.ipt", fakeService.FilesToReturn);
+        Assert.Contains(@"c:/temp/peca02.ipt", fakeService.FilesToReturn);
+        Assert.Contains(@"c:/temp/part01.ipt", fakeService.MovedFiles);
+        Assert.Contains(@"c:/temp/part02.ipt", fakeService.MovedFiles);
+        Assert.DoesNotContain(@"c:/temp/peca01.ipt", fakeService.MovedFiles);
+        Assert.DoesNotContain(@"c:/temp/peca02.ipt", fakeService.MovedFiles);
+        Assert.DoesNotContain(@"c:/temp/part01.ipt", fakeService.FilesToReturn);
+        Assert.DoesNotContain(@"c:/temp/part02.ipt", fakeService.FilesToReturn);
+    }
+
+    [Fact]
+    public void Execute_ShouldRenameAndCopyFiles_WhenValidPathsAreProvided()
+    {
+        // Arrange
+        var fakeService = new FakeFileService();
+        fakeService.FilesToReturn = [ @"c:/temp/peca01.ipt", @"c:/temp/peca02.ipt" ];
+        
+        var processor = new BatchRenamerProcessor(fakeService);
+
+        // Act
+        int result = processor.Execute(@"c:/temp", @"c:/temporario", "peca", "part", true);
+
+        // Assert
+        Assert.Equal(2, result);
+        Assert.Contains(@"c:/temporario/part01.ipt", fakeService.MovedFiles);
+        Assert.Contains(@"c:/temporario/part02.ipt", fakeService.MovedFiles);
     }
 }
