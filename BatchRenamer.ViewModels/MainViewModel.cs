@@ -1,16 +1,47 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using BatchRenamer.Core;
 
 namespace BatchRenamer.ViewModels;
 
-public class MainViewModel
+public class MainViewModel : INotifyPropertyChanged
 {
-    public string SourceFolderPath { get; set; } = string.Empty;
-    public string DestinationFolderPath { get; set; } = string.Empty;
+    private string _sourceFolderPath = string.Empty;
+    public string SourceFolderPath
+    {
+        get => _sourceFolderPath;
+        set
+        {
+            _sourceFolderPath = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _destinationFolderPath = string.Empty;
+    public string DestinationFolderPath
+    {
+        get => _destinationFolderPath;
+        set
+        {
+            _destinationFolderPath = value;
+            OnPropertyChanged();
+        }
+    }
     public string SearchText { get; set; } = string.Empty;
     public string ReplaceText { get; set; } = string.Empty;
-    public string ResultMessage { get; set; } = string.Empty;
     public bool CopyFiles { get; set; } = false;
+
+    private string _resultMessage = string.Empty;
+    public string ResultMessage
+    {
+        get => _resultMessage;
+        set
+        {
+            _resultMessage = value;
+            OnPropertyChanged(); 
+        }
+    }
 
     private readonly IFileService _fileService;
 
@@ -23,20 +54,21 @@ public class MainViewModel
     {
         try
         {
-            // Instanciamos o Maestro usando a interface que a ViewModel recebeu
             var processor = new BatchRenamerProcessor(_fileService);
             
-            // Lemos das próprias propriedades da classe
             int count = processor.Execute(SourceFolderPath, DestinationFolderPath, SearchText, ReplaceText, CopyFiles);
             
-            // 3. Atualizamos a propriedade da tela em vez de usar 'return'
             ResultMessage = $"Renomeação concluída com sucesso. Arquivos alterados: {count}";
         }
         catch (ArgumentException ex)
         {
-            // Usamos 'ex.Message' para pegar o texto exato do erro que vem lá do Core
-            // Isso garante que o teste ache a palavra "inválidos"
             ResultMessage = $"Erro: {ex.Message}";
         }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null!)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

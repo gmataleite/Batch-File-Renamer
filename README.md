@@ -1,54 +1,29 @@
-# Batch File Renamer (C# / .NET)
+# Batch File Renamer (C# / WPF / .NET 9)
 
-Uma ferramenta para renomeação de arquivos em lote, desenvolvida com foco estrito em Arquitetura Limpa, SOLID e Testes Automatizados.
+Uma ferramenta desktop nativa para Windows focada na renomeação e cópia de arquivos em lote. Desenvolvida com rigor técnico, priorizando **Arquitetura Limpa**, **SOLID** e **Testes Automatizados**.
 
-Este projeto é uma refatoração profunda de um script original em Python, evoluindo para o ecossistema .NET. O objetivo principal é garantir máxima robustez na manipulação de arquivos, separação clara de responsabilidades (IoC) e resiliência contra falhas de sistema operacional (I/O).
+Este projeto evoluiu de um script procedural para uma aplicação corporativa, demonstrando a separação estrita entre a interface gráfica e o domínio de negócio.
 
 ## 🚀 Tecnologias e Padrões
-* **Linguagem:** C# (.NET 9)
-* **Arquitetura:** Camadas Isoladas (Core, ViewModels, Tests, ConsoleApp)
-* **Padrões de Projeto:** MVVM (Model-View-ViewModel), Injeção de Dependência (DI) e Inversão de Controle (IoC).
-* **Testes:** xUnit com Mocks Manuais (Padrão Humble Object e Fake Services).
+* **Framework:** .NET 9.0
+* **Interface Gráfica (UI):** WPF (Windows Presentation Foundation) com XAML.
+* **Arquitetura:** Camadas Isoladas (Core, ViewModels, Tests, WPF) utilizando o padrão **MVVM** (Model-View-ViewModel).
+* **Testes:** xUnit com Mocks Manuais (*Fake Services*).
 * **Metodologia:** TDD (Test-Driven Development).
 
-## 🧠 Arquitetura e Lógica de Negócio (Core)
-O núcleo da aplicação (`BatchRenamer.Core`) foi desenvolvido de forma totalmente isolada da interface gráfica, garantindo que as regras de negócio sejam puras e altamente testáveis.
-
-**Injeção de Dependência:** As operações físicas de disco são abstraídas pela interface `IFileService`. Isso permite que o motor de renomeação (`BatchRenamerProcessor`) seja testado em isolamento absoluto, sem risco de corromper dados reais.
-
-Resiliência: O sistema é blindado contra entradas inválidas (caracteres proibidos pelo OS) e falhas de infraestrutura (como tentativas de mover arquivos bloqueados por outros processos), capturando `IOException` e `ArgumentException` graciosamente.
-
-As operações de disco e manipulação de strings protegem a integridade dos dados, como a preservação estrita das extensões originais dos arquivos durante a renomeação.
+## 🧠 Engenharia e Lógica de Negócio (Core)
+O motor da aplicação (`BatchRenamer.Core`) é completamente agnóstico em relação à interface visual.
+* **Injeção de Dependência (DI):** As operações de sistema operacional são abstraídas pela interface `IFileService`, permitindo testes isolados de lógica sem corromper o disco físico.
+* **Data Binding:** A comunicação entre o processador e a tela gráfica ocorre via `INotifyPropertyChanged`, garantindo que a UI seja apenas um reflexo do estado da aplicação.
+* **Integração de SO:** Utilização de `Microsoft.Win32.OpenFolderDialog` para delegação de navegação de diretórios ao núcleo do Windows.
 
 ## 🧪 Cobertura de Testes Automatizados
-O projeto adota uma abordagem *Test-First*. A lógica é validada através de testes unitários parametrizados (`[Theory]`) e (`[Fact]`), cobrindo cenários críticos:
-* **Manipulação Segura:** Substituição de strings garantindo a preservação estrita das extensões originais (inclusive em arquivos com múltiplos pontos no nome, ex: `peca.v1.final.ipt`).
-* **Casos de Borda (Edge Cases):** Tratamento de buscas vazias e injeção de caracteres inválidos de SO (ex: `/`, `*`, `?`).
-* **Mocks de I/O:** Uso de um `FakeFileService` em memória para simular o disco rígido, validar o estado interno do processador e simular arquivos bloqueados.
-* **Validação da ViewModel:** Testes garantindo que a camada de tradução (MVVM) capture as exceções do Core e atualize o status da interface corretamente.
+A aplicação foi construída com a mentalidade *Test-First*. A suíte do xUnit valida:
+- Preservação de extensões de arquivo complexas (ex: `.ipt`, `.iam`).
+- Proteção contra caminhos nulos, strings vazias e caracteres inválidos.
+- Prova matemática de rotas de execução entre Mover (Move) e Copiar (Copy) através de injeção de dublês de infraestrutura.
 
-## 💻 Como executar os testes (CLI)
-1. Executar a Aplicação (MVP via Console)
-A versão atual possui uma interface via CLI (Command Line Interface) totalmente funcional.
-   ```bash
-   # Navegue até a pasta do projeto executável
-   cd BatchRenamer.ConsoleApp
-
-   # Execute o programa
-   dotnet run
-
-2. Executar os Testes Automatizados
-Para rodar a suíte de testes que valida as regras de negócio sem tocar no disco físico:
-   ```bash
-   # Na raiz do repositório
-   dotnet test
-   
-## 🗺️ Roadmap
-[x] Conclusão do MVP (CLI com Injeção de Dependência e MVVM base).
-
-[x] Adicionar funcionalidade de "Copiar" arquivos (além de mover).
-
-[x] Suporte para caminhos de destino diferentes do diretório de origem.
-
-[ ] Construção da Interface Gráfica (GUI) nativa para Windows (WPF/WinUI 3).
-
+## 💻 Como Executar
+O projeto pode ser compilado como um único arquivo executável autossuficiente (Single-File Deployment):
+```bash
+dotnet publish BatchRenamer.WPF/BatchRenamer.WPF.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
