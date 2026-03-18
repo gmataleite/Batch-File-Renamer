@@ -1,29 +1,38 @@
 # Batch File Renamer (C# / WPF / .NET 9)
 
-Uma ferramenta desktop nativa para Windows focada na renomeação e cópia de arquivos em lote. Desenvolvida com rigor técnico, priorizando **Arquitetura Limpa**, **SOLID** e **Testes Automatizados**.
+A native Windows desktop tool focused on batch file renaming and copying. Developed with technical rigor, prioritizing **Clean Architecture**, **SOLID principles**, and **Automated Testing**.
 
-Este projeto evoluiu de um script procedural para uma aplicação corporativa, demonstrando a separação estrita entre a interface gráfica e o domínio de negócio.
+This project evolved from a procedural script into an enterprise-grade application, demonstrating a strict separation between the Graphical User Interface (GUI) and the business domain.
 
-## 🚀 Tecnologias e Padrões
+
+## 📥 Download & Installation (For Users)
+You don't need the .NET SDK installed to run the stable version:
+1. Go to the [Releases](https://github.com/gmataleite/Batch-File-Renamer/releases/tag/v1.0.0) page.
+2. Download the latest version .zip file.
+3. Extract and run BatchRenamer.exe.
+
+Note: As a self-contained (Single-File) executable, the first launch might take a few extra seconds while Windows validates the package.
+
+## 🚀 Technologies and Patterns
 * **Framework:** .NET 9.0
-* **Interface Gráfica (UI):** WPF (Windows Presentation Foundation) com XAML.
-* **Arquitetura:** Camadas Isoladas (Core, ViewModels, Tests, WPF) utilizando o padrão **MVVM** (Model-View-ViewModel).
-* **Testes:** xUnit com Mocks Manuais (*Fake Services*).
-* **Metodologia:** TDD (Test-Driven Development).
+* **Graphical Interface (UI):** WPF (Windows Presentation Foundation) com XAML.
+* **Architecture:** Isolated Layers (Core, ViewModels, Tests, WPF) utilizing the **MVVM** (Model-View-ViewModel) pattern.
+* **Tests:** xUnit with Manual Mocks (*Fake Services*).
+* **Methodology:** TDD (Test-Driven Development).
 
-## 🧠 Engenharia e Lógica de Negócio (Core)
-O motor da aplicação (`BatchRenamer.Core`) é completamente agnóstico em relação à interface visual.
-* **Injeção de Dependência (DI):** As operações de sistema operacional são abstraídas pela interface `IFileService`, permitindo testes isolados de lógica sem corromper o disco físico.
-* **Data Binding:** A comunicação entre o processador e a tela gráfica ocorre via `INotifyPropertyChanged`, garantindo que a UI seja apenas um reflexo do estado da aplicação.
-* **Integração de SO:** Utilização de `Microsoft.Win32.OpenFolderDialog` para delegação de navegação de diretórios ao núcleo do Windows.
+## 🧠 Engineering & Business Logic (Core)
+The application engine (`BatchRenamer.Core`) is completely agnostic to the visual interface.
+* **Dependency Injection (DI):** Operating system operations are abstracted via the IFileService interface, allowing isolated logic testing without affecting the physical disk.
+* **Data Binding:** Communication between the processor and the UI occurs via `INotifyPropertyChanged`, ensuring the UI is strictly a reflection of the application state.
+* **OS Integration:** Utilizes `Microsoft.Win32.OpenFolderDialog` to delegate directory navigation to the Windows shell.
 
-## 🧪 Cobertura de Testes Automatizados
-A aplicação foi construída com a mentalidade *Test-First*. A suíte do xUnit valida:
-- Preservação de extensões de arquivo complexas (ex: `.ipt`, `.iam`).
-- Proteção contra caminhos nulos, strings vazias e caracteres inválidos.
-- Prova matemática de rotas de execução entre Mover (Move) e Copiar (Copy) através de injeção de dublês de infraestrutura.
+## 🧪 Automated Test Coverage
+The application was built with a *Test-First* mindset. The xUnit suite validates:
+- Preservation of complex file extensions (ex: `.ipt`, `.iam`).
+- Protection against null paths, empty strings, and invalid characters.
+- Verification of execution paths for Move and Copy operations through infrastructure double injection.
 
-## 💻 Como Executar
-O projeto pode ser compilado como um único arquivo executável autossuficiente (Single-File Deployment):
+## 💻 How to Run
+The project can be compiled as a self-contained Single-File executable:
 ```bash
 dotnet publish BatchRenamer.WPF/BatchRenamer.WPF.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
