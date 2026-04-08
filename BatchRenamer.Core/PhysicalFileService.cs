@@ -21,4 +21,15 @@ public class PhysicalFileService : IFileService
         // Executa a movimentação/renomeação física no Windows
         File.Copy(sourcePath, destinationPath);
     }
+
+    public bool FileExists(string path)
+    {
+        return File.Exists(path);
+    }
+
+    public FileConflictAction AskUserConflictAction(string fileName)
+    {
+        // Para console, por padrão substituir
+        return FileConflictAction.Replace;
+    }
 }

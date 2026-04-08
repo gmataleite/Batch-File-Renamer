@@ -9,7 +9,6 @@ public class MainViewModelTests
     public void ExecuteRename_WithInvalidSearchText_ShouldUpdateResultMessageWithError()
     {
         // Arrange
-        // 1. Criamos a peça falsa (Dublê)
         var fakeService = new FakeFileService();
         fakeService.FilesToReturn = [ @"C:\temp\peca01.ipt" ];
 
@@ -17,22 +16,21 @@ public class MainViewModelTests
 
         viewModel.SourceFolderPath = @"C:\temp";
         viewModel.DestinationFolderPath = @"C:\temp";
-        viewModel.SearchText = "/"; // Caractere inválido intencional
+        viewModel.SearchText = "/";
         viewModel.ReplaceText = "novo";
 
         // Act
         viewModel.ExecuteRename();
 
         // Assert
-        // Verificamos se a propriedade de mensagem da tela contém a palavra "inválidos"
         Assert.Contains("inválidos", viewModel.ResultMessage);
+        Assert.Equal("Red", viewModel.ResultMessageColor);
     }
 
     [Fact]
     public void ExecuteRename_WithValidInputs_ShouldUpdateResultMessageWithSuccess()
     {
         // Arrange
-        // 1. Criamos a peça falsa (Dublê)
         var fakeService = new FakeFileService();
         fakeService.FilesToReturn = [ @"C:\temp\peca01.ipt" ];
 
@@ -47,16 +45,37 @@ public class MainViewModelTests
         viewModel.ExecuteRename();
 
         // Assert
-        // Verificamos se a propriedade de mensagem da tela contém a palavra "sucesso"
         Assert.Contains("sucesso", viewModel.ResultMessage);
         Assert.Contains("1", viewModel.ResultMessage);
+        Assert.Equal("Green", viewModel.ResultMessageColor);
     }
 
-        [Fact]
+    [Fact]
+    public void ExecuteRename_WithNoMatchingFiles_ShouldShowRedMessage()
+    {
+        // Arrange
+        var fakeService = new FakeFileService();
+        fakeService.FilesToReturn = [];
+
+        var viewModel = new MainViewModel(fakeService);
+
+        viewModel.SourceFolderPath = @"C:\temp";
+        viewModel.DestinationFolderPath = @"C:\temp";
+        viewModel.SearchText = "peca";
+        viewModel.ReplaceText = "part";
+
+        // Act
+        viewModel.ExecuteRename();
+
+        // Assert
+        Assert.Equal("Nenhum arquivo foi alterado.", viewModel.ResultMessage);
+        Assert.Equal("Red", viewModel.ResultMessageColor);
+    }
+
+    [Fact]
     public void ExecuteRenameToDifferentFolder_WithValidInputs_ShouldUpdateResultMessageWithSuccess()
     {
         // Arrange
-        // 1. Criamos a peça falsa (Dublê)
         var fakeService = new FakeFileService();
         fakeService.FilesToReturn = [ @"C:\temp\peca01.ipt" ];
 
@@ -71,7 +90,6 @@ public class MainViewModelTests
         viewModel.ExecuteRename();
 
         // Assert
-        // Verificamos se a propriedade de mensagem da tela contém a palavra "sucesso"
         Assert.Contains("sucesso", viewModel.ResultMessage);
         Assert.Contains("1", viewModel.ResultMessage);
     }

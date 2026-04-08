@@ -15,12 +15,10 @@ public class RenameFilesTests
     
     public void GenerateNewName_WhenReplacingText_ReturnsCorrectName(string oldName, string search, string replace, string expectedName)
     {
-        // Arrange (Cenario)
-
-        // Act (Ação)
+        // Act
         string changedName = RenameFiles.GenerateNewName(oldName, search, replace);
 
-        // Assert (Verificação)
+        // Assert
         Assert.Equal(expectedName, changedName);
     }
 
@@ -33,11 +31,6 @@ public class RenameFilesTests
 
     public void GenerateNewName_WithInvalidCharacter_ReturnException (string oldName, string search, string replace)
     {
-        // Arrange
-        // string oldName = "old_name.extension";
-        // string search = "/";
-        // string replace = "new";
-
         // Act & Assert
         Assert.Throws<ArgumentException>(() => RenameFiles.GenerateNewName(oldName, search, replace));
 

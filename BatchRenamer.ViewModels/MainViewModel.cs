@@ -33,6 +33,8 @@ public class MainViewModel : INotifyPropertyChanged
     public bool CopyFiles { get; set; } = false;
 
     private string _resultMessage = string.Empty;
+    private string _resultMessageColor = "Black";
+
     public string ResultMessage
     {
         get => _resultMessage;
@@ -40,6 +42,16 @@ public class MainViewModel : INotifyPropertyChanged
         {
             _resultMessage = value;
             OnPropertyChanged(); 
+        }
+    }
+
+    public string ResultMessageColor
+    {
+        get => _resultMessageColor;
+        private set
+        {
+            _resultMessageColor = value;
+            OnPropertyChanged();
         }
     }
 
@@ -58,11 +70,21 @@ public class MainViewModel : INotifyPropertyChanged
             
             int count = processor.Execute(SourceFolderPath, DestinationFolderPath, SearchText, ReplaceText, CopyFiles);
             
-            ResultMessage = $"Renomeação concluída com sucesso. Arquivos alterados: {count}";
+            if (count > 0)
+            {
+                ResultMessage = $"Renomeação concluída com sucesso. Arquivos alterados: {count}";
+                ResultMessageColor = "Green";
+            }
+            else
+            {
+                ResultMessage = "Nenhum arquivo foi alterado.";
+                ResultMessageColor = "Red";
+            }
         }
         catch (ArgumentException ex)
         {
             ResultMessage = $"Erro: {ex.Message}";
+            ResultMessageColor = "Red";
         }
     }
 

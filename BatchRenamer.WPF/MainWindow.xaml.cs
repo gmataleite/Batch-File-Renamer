@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Microsoft.Win32; // Importação necessária para chamar a janela do Windows
+using Microsoft.Win32;
 using BatchRenamer.ViewModels;
 
 namespace BatchRenamer.WPF
@@ -18,7 +18,6 @@ namespace BatchRenamer.WPF
                 Title = "Selecione a pasta de origem"
             };
 
-            // Se o usuário clicar em "Selecionar Pasta" em vez de "Cancelar"
             if (dialog.ShowDialog() == true)
             {
                 if (DataContext is MainViewModel viewModel)

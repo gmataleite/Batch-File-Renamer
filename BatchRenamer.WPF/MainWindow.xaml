@@ -34,6 +34,6 @@
 
         <Button Content="PROCESSAR ARQUIVOS" Click="BtnProcessar_Click" Padding="10" FontWeight="Bold" Background="#007ACC" Foreground="White"/>
 
-        <TextBlock Text="{Binding ResultMessage}" Margin="0,20,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="#D9534F"/>
+        <TextBlock Text="{Binding ResultMessage}" Margin="0,20,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="{Binding ResultMessageColor}"/>
     </StackPanel>
 </Window>

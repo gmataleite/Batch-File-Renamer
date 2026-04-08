@@ -4,6 +4,7 @@ public interface IFileService
 {
     string[] GetFilesFromDirectory(string path);
     void Move(string sourcePath, string destinationPath);
-
     void Copy(string sourcePath, string destinationPath);
+    bool FileExists(string path);
+    FileConflictAction AskUserConflictAction(string fileName);
 }
