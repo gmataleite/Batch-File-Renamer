@@ -27,7 +27,7 @@ public class PhysicalFileService : IFileService
         return File.Exists(path);
     }
 
-    public FileConflictAction AskUserConflictAction(string fileName)
+    public virtual FileConflictAction AskUserConflictAction(string fileName)
     {
         // Para console, por padrão substituir
         return FileConflictAction.Replace;

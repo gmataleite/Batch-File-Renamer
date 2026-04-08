@@ -12,7 +12,7 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        IFileService physicalFileService = new PhysicalFileService();
+        IFileService physicalFileService = new WpfPhysicalFileService();
 
         var viewModel = new MainViewModel(physicalFileService);
 
